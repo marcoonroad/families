@@ -14,9 +14,9 @@ before_install:
   - bash travis-ci.sh
 
 install:
-  - luarocks install luasocket
-  - luarocks install LuaFileSystem
-  - luarocks install busted
+  - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install luasocket"
+  - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install LuaFileSystem"
+  - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install busted"
 
 cache:
   directories:
