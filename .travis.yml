@@ -1,16 +1,31 @@
-language: erlang
+language: c
+
+sudo: false
 
 env:
-  - LUA=""
-  - LUA="luajit"
+  global:
+    - LUAROCKS_VERSION="2.4.1"
+  matrix:
+    - LUA_VERSION="5.2.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-alfa"
+    - LUA_VERSION="5.3.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-beta"
+    - LUA_VERSION="5.3.4" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-gama"
+
+before_install:
+  - bash travis-ci.sh
 
 install:
-  - sudo apt-get install luajit
-  - sudo apt-get install luarocks
-  - sudo luarocks install LuaFileSystem
-  - sudo luarocks install busted
+  - luarocks install luasocket
+  - luarocks install LuaFileSystem
+  - luarocks install busted
 
-script: "busted"
+cache:
+  directories:
+    - "$HOME/.travis-ci-lua-alfa"
+    - "$HOME/.travis-ci-lua-beta"
+    - "$HOME/.travis-ci-lua-gama"
+
+script:
+  - busted spec
 
 branches:
   except:
