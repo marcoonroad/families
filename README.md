@@ -2,6 +2,8 @@
 
 Concatenation-based prototypes implementation for Lua.
 
+[![Build Status](https://travis-ci.org/marcoonroad/families.svg?branch=master)](https://travis-ci.org/marcoonroad/families)
+
 ### Introduction
 
 This is a simple but somehow pure OO framework for the Lua language. Pure in the
