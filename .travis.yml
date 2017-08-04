@@ -25,7 +25,7 @@ cache:
     - "$HOME/.travis-ci-lua-gama"
 
 script:
-  - busted spec
+  - "$TRAVIS_CACHE_DIRECTORY/bin/busted spec"
 
 branches:
   except:
