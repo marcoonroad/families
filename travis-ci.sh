@@ -1,6 +1,6 @@
 # Travis-CI custom script
 
-if [ -d $TRAVIS_CACHE_DIRECTORY ]
+if [ -d $TRAVIS_CACHE_DIRECTORY/lua-$LUA_VERSION ]
 then
     echo "Reusing cache directory $TRAVIS_CACHE_DIRECTORY..."
 else
