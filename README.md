@@ -3,6 +3,7 @@
 Concatenation-based prototypes implementation for Lua.
 
 [![Build Status](https://travis-ci.org/marcoonroad/families.svg?branch=master)](https://travis-ci.org/marcoonroad/families)
+[![Coverage Status](https://coveralls.io/repos/github/marcoonroad/families/badge.svg?branch=master)](https://coveralls.io/github/marcoonroad/families?branch=master)
 
 ### Introduction
 
