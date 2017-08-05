@@ -29,10 +29,10 @@ cache:
 
 script:
   - "$TRAVIS_CACHE_DIRECTORY/bin/luacheck --std max+busted src/families/*.lua src/families/internals/*.lua spec"
-  - "$TRAVIS_CACHE_DIRECTORY/bin/busted --verbose --coverage"
+  - "$TRAVIS_CACHE_DIRECTORY/bin/busted --verbose --coverage spec"
 
 after_success:
-  - "$TRAVIS_CACHE_DIRECTORY/bin/luacov-coveralls"
+  - "$TRAVIS_CACHE_DIRECTORY/bin/luacov-coveralls -e $HOME/.travis-ci-lua-*"
 
 branches:
   except:
