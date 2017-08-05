@@ -30,10 +30,7 @@ function export: __newindex (selector, value)
     local previous = self[ selector ] -- triggers __index --
 
     for clone in pairs (memory.clones[ self ]) do
-        if memory.updated[ clone ][ selector ] then
-            -- just skip it --
-
-        else
+        if not memory.updated[ clone ][ selector ] then
             memory.structure[ clone ][ selector ] = previous
             memory.updated  [ clone ][ selector ] = true
         end
@@ -51,10 +48,7 @@ function export: __gc ( )
     -- copy the structure which self represents --
     for selector, value in pairs (structure) do
         for clone in pairs (memory.clones[ self ]) do
-            if memory.updated[ clone ][ selector ] then
-                -- do nothing else --
-
-            else
+            if not memory.updated[ clone ][ selector ] then
                 memory.structure[ clone ][ selector ] = value
                 memory.updated  [ clone ][ selector ] = true
             end

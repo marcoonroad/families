@@ -13,7 +13,7 @@ concatenative prototypes. They're implemented on the Kevo language together with
 features called _module operations_, which are in some sense akin to the well-known trait
 operators.
 
-[![Concatenative Cloning](doc/concatenative-cloning.png)
+![Concatenative Cloning](doc/concatenative-cloning.png)
 
 Because I already have implemented a library for software composition
 [here](http://github.com/marcoonroad/talents), I'm reserving myself to implement just
@@ -81,7 +81,7 @@ memory versus speed.
   prototype become the prototype of the current prototype's clones in the following way:
 
 
-[![Garbage Collection](doc/garbage-collection.png)
+![Garbage Collection](doc/garbage-collection.png)
 
 This optimization avoids a bunch of unnecessary things, for example, many iterations gathering the
 state of parents following the chains/links of cloning. Due the seamless and transparent semantics of

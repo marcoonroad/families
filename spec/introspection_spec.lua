@@ -11,7 +11,7 @@
 --         Bugs:  ---
 --        Notes:  ---
 --       Author:  Marco Aurélio da Silva (marcoonroad at gmail dot com)
--- Organization:  
+-- Organization:  ---
 --      Version:  1.0
 --      Created:  03-08-2017
 --     Revision:  ---

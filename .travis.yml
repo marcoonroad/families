@@ -28,7 +28,7 @@ cache:
     - "$HOME/.travis-ci-lua-gama"
 
 script:
-  - "$TRAVIS_CACHE_DIRECTORY/bin/luacheck --std max+busted src/families/*.lua spec"
+  - "$TRAVIS_CACHE_DIRECTORY/bin/luacheck --std max+busted src/families/*.lua src/families/internals/*.lua spec"
   - "$TRAVIS_CACHE_DIRECTORY/bin/busted --verbose --coverage"
 
 after_success:

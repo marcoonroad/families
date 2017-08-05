@@ -11,7 +11,7 @@
 --         Bugs:  ---
 --        Notes:  ---
 --       Author:  Marco Aurélio da Silva (marcoonroad at gmail dot com)
--- Organization:  
+-- Organization:  ---
 --      Version:  1.0
 --      Created:  03-08-2017
 --     Revision:  ---
@@ -69,25 +69,30 @@ describe ("families cloning", function ( )
     end)
 
     it ("should be independent of garbage collection", function ( )
-        local unit = families.clone (point2d, {
-            x = 1,
-            y = 1,
+        local double
+        local scale
 
-            scale = function (self, k)
-                return families.clone (self, {
-                    x = self.x * k,
-                    y = self.y * k,
-                })
-            end,
-        })
+        do
+            local unit = families.clone (point2d, {
+                x = 1,
+                y = 1,
 
-        local double = unit: scale (2)
+                scale = function (self, k)
+                    return families.clone (self, {
+                        x = self.x * k,
+                        y = self.y * k,
+                    })
+                end,
+            })
 
-        -- saving the closure/method beforehand --
-        local scale = unit.scale
+            double = unit: scale (2)
 
+            -- saving the closure/method beforehand --
+            scale = unit.scale
+        end
+
+        -- unit is not referenced anymore  --
         -- lets trigger garbage collection --
-        unit = nil
         collectgarbage ( )
 
         -- on Lua prior 5.2, there is no such __gc for tables --

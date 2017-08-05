@@ -11,7 +11,7 @@
 --         Bugs:  ---
 --        Notes:  ---
 --       Author:  Marco Aurélio da Silva (marcoonroad at gmail dot com)
--- Organization:  
+-- Organization:  ---
 --      Version:  1.0
 --      Created:  04-08-2017
 --     Revision:  ---
@@ -31,7 +31,7 @@ describe ("families reflection", function ( )
     }
 
     local marco = families.prototype (structure)
- 
+
     it ("should iterate the same fields from passed structure", function ( )
        -- ensures the same fields through two iterators --
         for selector, value in pairs (marco) do
