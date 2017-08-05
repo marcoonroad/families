@@ -32,7 +32,7 @@ script:
   - "$TRAVIS_CACHE_DIRECTORY/bin/busted --verbose --coverage spec"
 
 after_success:
-  - "$TRAVIS_CACHE_DIRECTORY/bin/luacov-coveralls -e travis-ci-lua"
+  - "$TRAVIS_CACHE_DIRECTORY/bin/luacov-coveralls -i src/families"
 
 branches:
   except:
