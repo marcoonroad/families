@@ -1,6 +1,6 @@
 local detailed = [[
 This library provides concatenation-based prototypical inheritance,
-heavily optimized with clone families and immutable objects.
+heavily optimized with clone families and garbage collection.
 ]]
 
 package = "families"
@@ -26,6 +26,14 @@ build = {
     type = "builtin",
 
     modules = {
-        [ "families" ] = "src/families/init.lua",
+        [ "families" ]                          = "src/families/init.lua",
+        [ "families.internals.metatable" ]      = "src/families/internals/metatable.lua",
+        [ "families.internals.weak" ]           = "src/families/internals/weak.lua",
+        [ "families.internals.standard" ]       = "src/families/internals/standard.lua",
+        [ "families.internals.reflection" ]     = "src/families/internals/reflection.lua",
+        [ "families.internals.memory" ]         = "src/families/internals/memory.lua",
+        [ "families.internals.reason" ]         = "src/families/internals/reason.lua",
+        [ "families.internals.reason.invalid" ] = "src/families/internals/reason/invalid.lua",
+        [ "families.internals.reason.missing" ] = "src/families/internals/reason/missing.lua",
     },
 }

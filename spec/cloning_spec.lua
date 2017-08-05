@@ -1,8 +1,10 @@
+#!/usr/bin/env lua
+
 --
 --------------------------------------------------------------------------------
 --         File:  families_spec.lua
 --
---        Usage:  (through busted)
+--        Usage:  ./cloning_spec.lua
 --
 --  Description:  Families specification test.
 --
@@ -17,6 +19,8 @@
 --     Revision:  ---
 --------------------------------------------------------------------------------
 --
+
+require 'busted.runner' ( )
 
 local families = require 'families'
 
@@ -55,6 +59,8 @@ describe ("families cloning", function ( )
         -- but it's not propagated into clones --
         assert.falsy (point2d.x == point3d.x)
         assert.falsy (point2d.y == point3d.y)
+
+        point2d: move (-5, -12)
     end)
 
     it ("should make the clone independent from prototype and vice-versa", function ( )
@@ -99,6 +105,23 @@ describe ("families cloning", function ( )
         -- therefore, this test will fail for that versions   --
         -- mostly cause double.scale will be a nil value      --
         assert.truthy (rawequal (scale, double.scale))
+    end)
+
+    it ("should not break lookup soundness on nil value", function ( )
+        local point = families.clone (point2d, { x = 8, })
+
+        -- let's add some thing for prototype --
+        function point2d: print ( )
+            return ("(%d, %d)"): format (self.x, self.y)
+        end
+
+        assert.same (point2d: print ( ), "(0, 0)")
+        assert.same (point.print, nil)
+
+        -- trying to break things is the best way to improve them --
+        point2d.print = nil
+
+        assert.same (point.print, nil)
     end)
 end)
 

@@ -1,8 +1,10 @@
+#!/usr/bin/env lua
+
 --
 --------------------------------------------------------------------------------
 --         File:  families_spec.lua
 --
---        Usage:  (through busted)
+--        Usage:  ./introspection_spec.lua
 --
 --  Description:  Families specification test.
 --
@@ -17,6 +19,8 @@
 --     Revision:  ---
 --------------------------------------------------------------------------------
 --
+
+require 'busted.runner' ( )
 
 local families = require 'families'
 

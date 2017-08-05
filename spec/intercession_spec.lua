@@ -1,8 +1,10 @@
+#!/usr/bin/env lua
+
 --
 --------------------------------------------------------------------------------
 --         File:  intercession_spec.lua
 --
---        Usage:  (through busted)
+--        Usage:  ./intercession_spec.lua
 --
 --  Description:  Families specification test.
 --
@@ -18,6 +20,8 @@
 --------------------------------------------------------------------------------
 --
 
+require 'busted.runner' ( )
+
 local families = require 'families'
 
 describe ("families reflection", function ( )
@@ -30,8 +34,19 @@ describe ("families reflection", function ( )
         race   = "Human", -- perhaps --
     }
 
+    local function show (self)
+        return ("%s [%s]"): format (self.name, self.race)
+    end
+
     local marco = families.prototype (structure)
 
+    do
+        local mirror = families.reflect (marco)
+
+        mirror.__tostring = show
+    end
+
+    --[[
     it ("should iterate the same fields from passed structure", function ( )
        -- ensures the same fields through two iterators --
         for selector, value in pairs (marco) do
@@ -42,11 +57,13 @@ describe ("families reflection", function ( )
             assert.same (value, marco[ selector ])
         end
     end)
+    ]]--
 
     it ("should pretty-print the same string from passed structure", function ( )
-        assert.same (tostring (structure), tostring (marco))
+        assert.same (show (structure), tostring (marco))
     end)
 
+    --[[
     it ("should delegate binary/unary operations", function ( )
         local previous = getmetatable (structure)
 
@@ -62,6 +79,19 @@ describe ("families reflection", function ( )
         end)
 
         setmetatable (structure, previous)
+    end)
+    ]]--
+
+    it ("should provide cloning on mirror-level", function ( )
+        local twin = families.clone (marco, {
+            name = "Marco's Evil Twin",
+            race = "Demon",
+        })
+
+        assert.same (
+            families.reflect (twin).__tostring,
+            families.reflect (marco).__tostring
+        )
     end)
 end)
 

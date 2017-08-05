@@ -77,7 +77,7 @@ memory versus speed.
 
 + v0.1-1: This version implements a variant of the clone families algorithm. It also optimizes
   for the cases where garbage collection of parents/prototypes occur. In that cases, it propagates
-  the changes for the current state of the prototype being collected. If the clones are non-updated
+  the changes for the current state of the prototype being collected. If the clones are outdated
   for some selector, they'll receive that current state from the prototype. Later, the current prototype's
   prototype become the prototype of the current prototype's clones in the following way:
 

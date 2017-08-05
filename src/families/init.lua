@@ -1,7 +1,8 @@
-local export    = { }
-local weak      = require 'families.internals.weak'
-local memory    = require 'families.internals.memory'
-local metatable = require 'families.internals.metatable'
+local export     = { }
+local reflection = require 'families.internals.reflection'
+local standard   = require 'families.internals.standard'
+local reason     = require 'families.internals.reason'
+local metatable  = require 'families.internals.metatable'
 
 ---------------------------------------------------------------------
 
@@ -10,39 +11,27 @@ function export.prototype (structure)
 end
 
 function export.clone (self, structure)
-    local object = { }
+    local object = standard.clone (self, structure)
 
-    memory.prototype[ object ] = self
-    memory.structure[ object ] = structure
-    memory.clones   [ object ] = setmetatable ({ }, weak.key)
-    memory.updated  [ object ] = setmetatable ({ }, weak.key)
-
-    if (not rawequal (self, nil)) and memory.structure[ self ] then
-        memory.clones[ self ][ object ] = true
-    end
-
-    setmetatable (object, metatable)
-
-    return object
+    return setmetatable (object, metatable)
 end
 
 function export.resembles (self, object)
-    local prototype = memory.prototype[ self ]
-
-    while not rawequal (prototype, nil) do
-        if rawequal (prototype, object) then
-            return true
-
-        else
-            prototype = memory.prototype[ prototype ]
-        end
-    end
-
-    return false
+    return standard.resembles (self, object)
 end
 
 function export.represents (self, object)
     return export.resembles (object, self)
+end
+
+function export.reflect (self)
+    local mirror = assert (reflection.reflect (self), reason.invalid.object)
+
+    if rawequal (getmetatable (mirror), nil) then
+        setmetatable (mirror, metatable)
+    end
+
+    return mirror
 end
 
 return export

@@ -5,6 +5,8 @@ sudo: false
 env:
   global:
     - LUAROCKS_VERSION="2.4.1"
+    - ROCK_NAME="families"
+    - ROCK_VERSION="0.1-1"
   matrix:
     - LUA_VERSION="5.2.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-alfa"
     - LUA_VERSION="5.3.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-beta"
@@ -14,12 +16,13 @@ before_install:
   - bash travis-ci.sh
 
 install:
-  - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install luasocket"
-  - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install LuaFileSystem"
-  - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install busted"
-  - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install luacov"
-  - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install luacov-coveralls"
-  - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install luacheck"
+  - export "PATH=$TRAVIS_CACHE_DIRECTORY/bin:$PATH"
+  - luarocks install luasocket
+  - luarocks install LuaFileSystem
+  - luarocks install busted
+  - luarocks install luacov
+  - luarocks install luacov-coveralls
+  - luarocks install luacheck
 
 cache:
   directories:
@@ -28,11 +31,17 @@ cache:
     - "$HOME/.travis-ci-lua-gama"
 
 script:
-  - "$TRAVIS_CACHE_DIRECTORY/bin/luacheck --std max+busted src/families/*.lua src/families/internals/*.lua spec"
-  - "$TRAVIS_CACHE_DIRECTORY/bin/busted --verbose --coverage spec"
+  - export "PATH=$TRAVIS_CACHE_DIRECTORY/bin:$PATH"
+  - luarocks lint "$ROCK_NAME-$ROCK_VERSION.rockspec"
+  - luacheck --std max+busted src spec
+  - busted --verbose --coverage spec
+  - luarocks make
+  - lua -lfamilies -e "print ('Library $ROCK_NAME was loaded successfully...')"
 
 after_success:
-  - "$TRAVIS_CACHE_DIRECTORY/bin/luacov-coveralls -i src/families"
+  - export "PATH=$TRAVIS_CACHE_DIRECTORY/bin:$PATH"
+  - luacov-coveralls -i src --dryrun
+  - luacov-coveralls -i src
 
 branches:
   except:

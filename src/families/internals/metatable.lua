@@ -1,12 +1,16 @@
-local export = { }
-local memory = require 'families.internals.memory'
+local export     = { }
+local memory     = require 'families.internals.memory'
+local reflection = require 'families.internals.reflection'
+local reason     = require 'families.internals.reason'
 
 function export: __index (selector)
     local structure = memory.structure[ self ]
     local prototype = memory.prototype[ self ]
     local value     = structure[ selector ]
 
-    if rawequal (value, nil) and not rawequal (prototype, nil) then
+    if rawequal (value, nil) and (not rawequal (prototype, nil))
+        and (not memory.updated[ self ][ selector ])
+    then
         value = prototype[ selector ]
 
         -- polymorphic inline cache --
@@ -62,72 +66,59 @@ function export: __gc ( )
     -- self is dead --
 end
 
-function export: __pairs ( )
-    return pairs (memory.structure[ self ])
-end
+-------------------------------------------------------------------------------
 
-function export: __tostring ( )
-    return tostring (memory.structure[ self ])
-end
+local unary = {
+    __unm      = true, __bnot  = true, __len    = true,
+    __call     = true, __pairs = true, __ipairs = true,
+    __tostring = true,
+}
 
-function export: __add (object)
-    local structure = memory.structure[ self ]
+local binary = {
+    __add    = true, __sub  = true, __mul  = true,
+    __div    = true, __pow  = true, __idiv = true,
+    __mod    = true,
+    __eq     = true, __lt   = true, __le   = true,
+    __band   = true, __bor  = true, __bxor = true,
+    __concat = true, __shl  = true, __shr  = true,
+}
 
-    if rawequal (structure, nil) then
-        -- object is who triggers this metamethod --
-        return self + memory.structure[ object ]
+local function dispatch (self, selector, object, ...)
+    local mirror = reflection.reflect (self)
+
+    if rawequal (mirror, nil) and binary[ selector ] then
+        mirror = assert (reflection.reflect (object), reason.invalid.object)
+    end
+
+    -- assigns the metatable which reflect avoids to do --
+    if rawequal (getmetatable (mirror), nil) then
+        setmetatable (mirror, export)
+    end
+
+    local value = mirror[ selector ]
+
+    if rawequal (value, nil) then
+        error (reason.missing.metamethod: format (selector))
 
     else
-        return structure + object
+        return value (self, object, ...)
     end
 end
 
-function export: __sub (object)
-    local structure = memory.structure[ self ]
-
-    if rawequal (structure, nil) then
-        return self - memory.structure[ object ]
-
-    else
-        return structure - object
+local function metamethod (selector)
+    return function (self, ...)
+        return dispatch (self, selector, ...)
     end
 end
 
-function export: __mul (object)
-    local structure = memory.structure[ self ]
+-------------------------------------------------------------------------------
 
-    if rawequal (structure, nil) then
-        return self * memory.structure[ object ]
-
-    else
-        return structure * object
-    end
+for metaevent in pairs (binary) do
+    export[ metaevent ] = metamethod (metaevent)
 end
 
-function export: __div (object)
-    local structure = memory.structure[ self ]
-
-    if rawequal (structure, nil) then
-        return self / memory.structure[ object ]
-
-    else
-        return structure / object
-    end
-end
-
-function export: __mod (object)
-    local structure = memory.structure[ self ]
-
-    if rawequal (structure, nil) then
-        return self % memory.structure[ object ]
-
-    else
-        return structure % object
-    end
-end
-
-function export: __call (...)
-    return memory.structure[ self ] (...)
+for metaevent in pairs (unary) do
+    export[ metaevent ] = metamethod (metaevent)
 end
 
 return export

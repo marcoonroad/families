@@ -1,5 +1,6 @@
 *~
 *.swp
+.~lock.*#
 *.rock
 TRASH/
 doc/families.odg
