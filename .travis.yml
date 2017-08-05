@@ -36,6 +36,7 @@ script:
   - luacheck --std max+busted src spec
   - busted --verbose --coverage spec
   - luarocks make
+  - eval `luarocks path`
   - lua -lfamilies -e "print ('Library $ROCK_NAME was loaded successfully...')"
 
 after_success:
