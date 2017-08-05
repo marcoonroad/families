@@ -17,6 +17,9 @@ install:
   - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install luasocket"
   - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install LuaFileSystem"
   - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install busted"
+  - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install luacov"
+  - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install luacov-coveralls"
+  - "$TRAVIS_CACHE_DIRECTORY/bin/luarocks install luacheck"
 
 cache:
   directories:
@@ -25,7 +28,11 @@ cache:
     - "$HOME/.travis-ci-lua-gama"
 
 script:
-  - "$TRAVIS_CACHE_DIRECTORY/bin/busted spec"
+  - "$TRAVIS_CACHE_DIRECTORY/bin/luacheck --std max+busted src/families/*.lua spec"
+  - "$TRAVIS_CACHE_DIRECTORY/bin/busted --verbose --coverage"
+
+after_success:
+  - "$TRAVIS_CACHE_DIRECTORY/bin/luacov-coveralls"
 
 branches:
   except:

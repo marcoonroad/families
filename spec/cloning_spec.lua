@@ -57,6 +57,17 @@ describe ("families cloning", function ( )
         assert.falsy (point2d.y == point3d.y)
     end)
 
+    it ("should make the clone independent from prototype and vice-versa", function ( )
+        local clone = families.clone (point2d, { })
+
+        -- some mutation on cloned object here --
+        clone: move (7, 3)
+
+        -- but the prototype won't be aware of that --
+        assert.falsy (point2d.x == clone.x)
+        assert.falsy (point2d.y == clone.y)
+    end)
+
     it ("should be independent of garbage collection", function ( )
         local unit = families.clone (point2d, {
             x = 1,
@@ -79,6 +90,9 @@ describe ("families cloning", function ( )
         unit = nil
         collectgarbage ( )
 
+        -- on Lua prior 5.2, there is no such __gc for tables --
+        -- therefore, this test will fail for that versions   --
+        -- mostly cause double.scale will be a nil value      --
         assert.truthy (rawequal (scale, double.scale))
     end)
 end)
