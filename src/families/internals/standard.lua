@@ -47,10 +47,9 @@ function export.destroy (self)
     end
 
     local finalizer = getmetatable (self).__gc
+    finalizer (self)
 
     memory.destroyed[ self ] = true
-
-    finalizer (self)
 end
 
 return export
