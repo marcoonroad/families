@@ -33,10 +33,15 @@ function export: __newindex (selector, value)
     local previous = self[ selector ] -- triggers __index --
 
     for clone in pairs (memory.clones[ self ]) do
-        if not memory.updated[ clone ][ selector ] then
+        -- despite null value, was it changed after cloning? --
+        -- if no, lets update that clone with previous value --
+        if rawequal (memory.structure[ clone ][ selector ], nil) and
+            not memory.updated[ clone ][ selector ]
+        then
             memory.structure[ clone ][ selector ] = previous
-            memory.updated  [ clone ][ selector ] = true
         end
+
+        memory.updated[ clone ][ selector ] = true
     end
 
     local structure = memory.structure[ self ]

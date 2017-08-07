@@ -154,7 +154,8 @@ describe ("families cloning", function ( )
             families.destroy ("invalid object")
         end, reason.invalid.object)
 
-        local point = families.clone (point2d)
+        local point = families.clone (point2d, { x = -5, y = 16, })
+        local clone = families.clone (point, { y = 19, })
 
         -- doesn't matter how much we call such function --
         families.destroy (point)
@@ -171,6 +172,22 @@ describe ("families cloning", function ( )
         assert.error (function ( )
             print (point)
         end, reason.invalid.destroyed)
+
+        families.destroy (clone)
+    end)
+
+    -- ensures issue #3 fixing --
+    it ("should not propagate changes on existent properties", function ( )
+        local point = families.clone (point2d, { x = 7, })
+
+        -- let's trigger some mutation --
+        point2d: move (8, 8)
+
+        assert.same (point.x, 7)
+        assert.same (point.y, 0)
+
+        -- cleanup to default state --
+        point2d: move (-8, -8)
     end)
 end)
 
