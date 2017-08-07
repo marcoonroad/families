@@ -148,6 +148,30 @@ describe ("families cloning", function ( )
 
         assert.falsy (point2d.x == pointB.x)
     end)
+
+    it ("should not be usable when it enters in destroyed state", function ( )
+        assert.error (function ( )
+            families.destroy ("invalid object")
+        end, reason.invalid.object)
+
+        local point = families.clone (point2d)
+
+        -- doesn't matter how much we call such function --
+        families.destroy (point)
+        families.destroy (point)
+
+        assert.error (function ( )
+            local _ = point.x
+        end, reason.invalid.destroyed)
+
+        assert.error (function ( )
+            point.y = 10
+        end, reason.invalid.destroyed)
+
+        assert.error (function ( )
+            print (point)
+        end, reason.invalid.destroyed)
+    end)
 end)
 
 -- END --

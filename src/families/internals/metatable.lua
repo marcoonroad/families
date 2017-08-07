@@ -4,6 +4,10 @@ local reflection = require 'families.internals.reflection'
 local reason     = require 'families.internals.reason'
 
 function export: __index (selector)
+    if memory.destroyed[ self ] then
+        error (reason.invalid.destroyed)
+    end
+
     local structure = memory.structure[ self ]
     local prototype = memory.prototype[ self ]
     local value     = structure[ selector ]
@@ -22,7 +26,9 @@ function export: __index (selector)
 end
 
 function export: __newindex (selector, value)
-    local structure = memory.structure[ self ]
+    if memory.destroyed[ self ] then
+        error (reason.invalid.destroyed)
+    end
 
     local previous = self[ selector ] -- triggers __index --
 
@@ -33,12 +39,18 @@ function export: __newindex (selector, value)
         end
     end
 
+    local structure = memory.structure[ self ]
+
     -- finally commit everything --
     structure             [ selector ] = value
     memory.updated[ self ][ selector ] = true
 end
 
 function export: __gc ( )
+    if memory.destroyed[ self ] then
+        return
+    end
+
     local structure = memory.structure[ self ]
     local prototype = memory.prototype[ self ]
 
@@ -77,6 +89,10 @@ local binary = {
 }
 
 local function dispatch (self, selector, object, ...)
+    if memory.destroyed[ self ] then
+        error (reason.invalid.destroyed)
+    end
+
     local mirror = reflection.reflect (self)
 
     if rawequal (mirror, nil) and binary[ selector ] then

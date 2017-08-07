@@ -68,6 +68,18 @@ describe ("families reflection", function ( )
         assert.error (function ( )
             marco ( ) -- triggers __call metamethod --
         end, reason.missing.metamethod: format ('__call'))
+
+        assert.error (function ( )
+            local _ = marco + 1
+        end, reason.missing.metamethod: format ('__add'))
+
+        assert.error (function ( )
+            local _ = 5 * marco
+        end, reason.missing.metamethod: format ('__mul'))
+
+        assert.error (function ( )
+            local _ = 2 / families.prototype { }
+        end, reason.missing.metamethod: format ('__div'))
     end)
 
     --[[

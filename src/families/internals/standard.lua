@@ -41,6 +41,18 @@ function export.resembles (self, object)
     return false
 end
 
+function export.destroy (self)
+    if not memory.structure[ self ] then
+        error (reason.invalid.object)
+    end
+
+    local finalizer = getmetatable (self).__gc
+
+    memory.destroyed[ self ] = true
+
+    finalizer (self)
+end
+
 return export
 
 -- END --

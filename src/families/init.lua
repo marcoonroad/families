@@ -35,6 +35,10 @@ function export.reflect (self)
     return mirror
 end
 
+function export.destroy (self)
+    return standard.destroy (self)
+end
+
 return export
 
 -- END --
