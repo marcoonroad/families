@@ -24,13 +24,6 @@ end
 function export: __newindex (selector, value)
     local structure = memory.structure[ self ]
 
-    -- no need for propagation of changes --
-    if memory.updated[ self ][ selector ] then
-        structure[ selector ] = value
-
-        return
-    end
-
     local previous = self[ selector ] -- triggers __index --
 
     for clone in pairs (memory.clones[ self ]) do

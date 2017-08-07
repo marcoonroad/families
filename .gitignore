@@ -1,6 +1,9 @@
 *~
 *.swp
+*.swo
 .~lock.*#
 *.rock
 TRASH/
 doc/families.odg
+luacov.report.out
+luacov.stats.out

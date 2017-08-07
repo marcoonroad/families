@@ -23,6 +23,7 @@
 require 'busted.runner' ( )
 
 local families = require 'families'
+local reason   = require 'families.internals.reason'
 
 describe ("families cloning", function ( )
     local point2d = families.prototype {
@@ -107,6 +108,7 @@ describe ("families cloning", function ( )
         assert.truthy (rawequal (scale, double.scale))
     end)
 
+    -- ensures issue #1 fixing --
     it ("should not break lookup soundness on nil value", function ( )
         local point = families.clone (point2d, { x = 8, })
 
@@ -122,6 +124,29 @@ describe ("families cloning", function ( )
         point2d.print = nil
 
         assert.same (point.print, nil)
+    end)
+
+    it ("should not accept invalid arguments on cloning", function ( )
+        assert.error (function ( )
+            families.clone ("invalid prototype passed here", nil)
+        end, reason.invalid.prototype)
+    end)
+
+    -- ensures issue #2 fixing --
+    it ("should be able to propagate changes whenever they occur", function ( )
+        local pointA = families.clone (point2d, { y = 14, })
+
+        -- triggering mutation --
+        point2d: move (3, 6)
+
+        assert.falsy (point2d.x == pointA.x)
+
+        local pointB = families.clone (point2d)
+
+        -- triggering mutation again on the same fields --
+        point2d: move (-3, -6)
+
+        assert.falsy (point2d.x == pointB.x)
     end)
 end)
 

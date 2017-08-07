@@ -27,6 +27,7 @@ end
 function export.reflect (self)
     local mirror = assert (reflection.reflect (self), reason.invalid.object)
 
+    -- lazily attachs a metatable --
     if rawequal (getmetatable (mirror), nil) then
         setmetatable (mirror, metatable)
     end

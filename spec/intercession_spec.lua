@@ -23,6 +23,7 @@
 require 'busted.runner' ( )
 
 local families = require 'families'
+local reason   = require 'families.internals.reason'
 
 describe ("families reflection", function ( )
     local structure = {
@@ -63,6 +64,12 @@ describe ("families reflection", function ( )
         assert.same (show (structure), tostring (marco))
     end)
 
+    it ("should not reflect on undefined metamethods", function ( )
+        assert.error (function ( )
+            marco ( ) -- triggers __call metamethod --
+        end, reason.missing.metamethod: format ('__call'))
+    end)
+
     --[[
     it ("should delegate binary/unary operations", function ( )
         local previous = getmetatable (structure)
@@ -92,6 +99,12 @@ describe ("families reflection", function ( )
             families.reflect (twin).__tostring,
             families.reflect (marco).__tostring
         )
+    end)
+
+    it ("should not be able to reflect upon unknown objects", function ( )
+        assert.error (function ( )
+            families.reflect ("this is not a valid object for this library")
+        end, reason.invalid.object)
     end)
 end)
 

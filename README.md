@@ -111,7 +111,8 @@ Concatenation (i.e, creation-time sharing) is really an improvement for OO, than
 
 ### References
 
-+ [1] _Classes vs. Prototypes: Some Philosophical and Historical Observations_, by Antero Taivalsaari, __1996__
-+ [2] _Simplifying JavaScript with Concatenation-based Prototype Inheritance_, by Antero Taivalsaari, __2009__
++ [1] _Classes vs. Prototypes: Some Philosophical and Historical Observations_, by Antero Taivalsaari - __1996__
++ [2] _Simplifying JavaScript with Concatenation-based Prototype Inheritance_, by Antero Taivalsaari - __2009__
++ [3] _Classifying Prototype-based Programming Languages_, by C. Dony, J. Malenfant, D. Bardou - __?__
 
 END
