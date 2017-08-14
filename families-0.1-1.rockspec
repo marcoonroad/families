@@ -30,7 +30,6 @@ build = {
         [ "families.internals.metatable" ]      = "src/families/internals/metatable.lua",
         [ "families.internals.weak" ]           = "src/families/internals/weak.lua",
         [ "families.internals.standard" ]       = "src/families/internals/standard.lua",
-        [ "families.internals.reflection" ]     = "src/families/internals/reflection.lua",
         [ "families.internals.memory" ]         = "src/families/internals/memory.lua",
         [ "families.internals.reason" ]         = "src/families/internals/reason.lua",
         [ "families.internals.reason.invalid" ] = "src/families/internals/reason/invalid.lua",

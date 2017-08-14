@@ -117,12 +117,14 @@ describe ("families cloning", function ( )
             return ("(%d, %d)"): format (self.x, self.y)
         end
 
+        -- that thing exists only on prototype itself --
         assert.same (point2d: print ( ), "(0, 0)")
         assert.same (point.print, nil)
 
         -- trying to break things is the best way to improve them --
         point2d.print = nil
 
+        -- still nil, despite removed prototype's selector --
         assert.same (point.print, nil)
     end)
 
@@ -169,10 +171,6 @@ describe ("families cloning", function ( )
             point.y = 10
         end, reason.invalid.destroyed)
 
-        assert.error (function ( )
-            print (point)
-        end, reason.invalid.destroyed)
-
         families.destroy (clone)
     end)
 
@@ -183,6 +181,7 @@ describe ("families cloning", function ( )
         -- let's trigger some mutation --
         point2d: move (8, 8)
 
+        -- prototype's mutation won't affect child's existent selectors --
         assert.same (point.x, 7)
         assert.same (point.y, 0)
 

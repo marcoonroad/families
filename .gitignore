@@ -4,6 +4,8 @@
 .~lock.*#
 *.rock
 TRASH/
+wiki/
+wiki
 doc/families.odg
 luacov.report.out
 luacov.stats.out

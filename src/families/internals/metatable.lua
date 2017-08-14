@@ -1,6 +1,5 @@
 local export     = { }
 local memory     = require 'families.internals.memory'
-local reflection = require 'families.internals.reflection'
 local reason     = require 'families.internals.reason'
 
 function export: __index (selector)
@@ -78,6 +77,7 @@ end
 
 -------------------------------------------------------------------------------
 
+--[[
 local unary = {
     __unm      = true, __bnot  = true, __len    = true,
     __call     = true, __pairs = true, __ipairs = true,
@@ -134,6 +134,7 @@ end
 for metaevent in pairs (unary) do
     export[ metaevent ] = metamethod (metaevent)
 end
+]]--
 
 return export
 

@@ -1,7 +1,5 @@
 local export     = { }
-local reflection = require 'families.internals.reflection'
 local standard   = require 'families.internals.standard'
-local reason     = require 'families.internals.reason'
 local metatable  = require 'families.internals.metatable'
 
 ---------------------------------------------------------------------
@@ -24,6 +22,7 @@ function export.represents (self, object)
     return export.resembles (object, self)
 end
 
+--[[
 function export.reflect (self)
     local mirror = assert (reflection.reflect (self), reason.invalid.object)
 
@@ -34,6 +33,7 @@ function export.reflect (self)
 
     return mirror
 end
+]]--
 
 function export.destroy (self)
     return standard.destroy (self)

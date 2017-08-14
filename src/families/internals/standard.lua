@@ -23,6 +23,8 @@ function export.clone (self, structure)
         memory.clones[ self ][ object ] = true
     end
 
+    -- metatable is not defined here to avoid unexpected recursion --
+    -- while loading modules from internals library namespace...   --
     return object
 end
 
