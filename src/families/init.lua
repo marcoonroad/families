@@ -1,6 +1,6 @@
-local export     = { }
-local standard   = require 'families.internals.standard'
-local metatable  = require 'families.internals.metatable'
+local export    = { }
+local standard  = require 'families.internals.standard'
+local metatable = require 'families.internals.metatable'
 
 ---------------------------------------------------------------------
 

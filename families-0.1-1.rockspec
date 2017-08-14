@@ -19,7 +19,7 @@ description = {
 }
 
 dependencies = {
-    "lua >= 5.2, < 5.4",
+    "lua >= 5.1, < 5.4",
 }
 
 build = {
@@ -27,6 +27,7 @@ build = {
 
     modules = {
         [ "families" ]                          = "src/families/init.lua",
+        [ "families.internals.token" ]          = "src/families/internals/token.lua",
         [ "families.internals.metatable" ]      = "src/families/internals/metatable.lua",
         [ "families.internals.weak" ]           = "src/families/internals/weak.lua",
         [ "families.internals.standard" ]       = "src/families/internals/standard.lua",

@@ -1,78 +1,59 @@
-local export     = { }
-local memory     = require 'families.internals.memory'
-local reason     = require 'families.internals.reason'
+local export = { }
+local memory = require 'families.internals.memory'
+local reason = require 'families.internals.reason'
 
 function export: __index (selector)
-    if memory.destroyed[ self ] then
+    local ID = memory.token[ self ]
+
+    if memory.destroyed[ ID ] then
         error (reason.invalid.destroyed)
     end
 
-    local structure = memory.structure[ self ]
-    local prototype = memory.prototype[ self ]
+    local structure = memory.structure[ ID ]
+    local prototype = memory.prototype[ ID ]
     local value     = structure[ selector ]
 
     if rawequal (value, nil) and (not rawequal (prototype, nil))
-        and (not memory.updated[ self ][ selector ])
+        and (not memory.updated[ ID ][ selector ])
     then
         value = prototype[ selector ]
 
         -- polymorphic inline cache --
-        structure             [ selector ] = value
-        memory.updated[ self ][ selector ] = true
+        structure           [ selector ] = value
+        memory.updated[ ID ][ selector ] = true
     end
 
     return value
 end
 
 function export: __newindex (selector, value)
-    if memory.destroyed[ self ] then
+    local ID = memory.token[ self ]
+
+    if memory.destroyed[ ID ] then
         error (reason.invalid.destroyed)
     end
 
     local previous = self[ selector ] -- triggers __index --
 
-    for clone in pairs (memory.clones[ self ]) do
+    for clone in pairs (memory.clones[ ID ]) do
         -- despite null value, was it changed after cloning? --
         -- if no, lets update that clone with previous value --
-        if rawequal (memory.structure[ clone ][ selector ], nil) and
-            not memory.updated[ clone ][ selector ]
+        local cloneID = memory.token[ clone ]
+
+        if rawequal (memory.structure[ cloneID ][ selector ], nil) and
+            not memory.updated[ cloneID ][ selector ]
         then
-            memory.structure[ clone ][ selector ] = previous
+            memory.structure[ cloneID ][ selector ] = previous
         end
 
-        memory.updated[ clone ][ selector ] = true
+        memory.updated[ cloneID ][ selector ] = true
     end
 
-    local structure = memory.structure[ self ]
+    local structure = memory.structure[ ID ]
 
     -- finally commit everything --
-    structure             [ selector ] = value
-    memory.updated[ self ][ selector ] = true
-end
-
-function export: __gc ( )
-    if memory.destroyed[ self ] then
-        return
-    end
-
-    local structure = memory.structure[ self ]
-    local prototype = memory.prototype[ self ]
-
-    -- copy the structure which self represents --
-    for selector, value in pairs (structure) do
-        for clone in pairs (memory.clones[ self ]) do
-            if not memory.updated[ clone ][ selector ] then
-                memory.structure[ clone ][ selector ] = value
-                memory.updated  [ clone ][ selector ] = true
-            end
-
-            -- link self's clones against self's prototype --
-            memory.prototype          [ clone ] = prototype
-            memory.clones[ prototype ][ clone ] = true
-        end
-    end
-
-    -- self is dead --
+    structure           [ selector ] = value
+    memory.updated[ ID ][ selector ] = true
 end
 
 -------------------------------------------------------------------------------
