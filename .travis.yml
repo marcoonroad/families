@@ -13,10 +13,9 @@ env:
     - LUA_VERSION="5.3.4" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-gama"
 
 before_install:
-  - bash travis-ci.sh
+  - source travis-ci.sh
 
 install:
-  - export "PATH=$TRAVIS_CACHE_DIRECTORY/bin:$PATH"
   - luarocks install luasocket
   - luarocks install LuaFileSystem
   - luarocks install busted
@@ -31,7 +30,6 @@ cache:
     - "$HOME/.travis-ci-lua-gama"
 
 script:
-  - export "PATH=$TRAVIS_CACHE_DIRECTORY/bin:$PATH"
   - luarocks lint "$ROCK_NAME-$ROCK_VERSION.rockspec"
   - luacheck --std max+busted src spec
   - busted --verbose --coverage spec
@@ -40,7 +38,6 @@ script:
   - lua -lfamilies -e "print ('Library $ROCK_NAME was loaded successfully...')"
 
 after_success:
-  - export "PATH=$TRAVIS_CACHE_DIRECTORY/bin:$PATH"
   - luacov-coveralls -i src --dryrun
   - luacov-coveralls -i src
 
