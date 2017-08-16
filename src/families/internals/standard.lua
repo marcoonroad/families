@@ -1,53 +1,57 @@
-local export = { }
-local token  = require 'families.internals.token'
-local memory = require 'families.internals.memory'
-local weak   = require 'families.internals.weak'
-local reason = require 'families.internals.reason'
+local export    = { }
+local memory    = require 'families.internals.memory'
+local reason    = require 'families.internals.reason'
+local structure = require 'families.internals.structure'
+local metatable = require 'families.internals.metatable'
 
-function export.clone (self, structure)
-    if (not rawequal (self, nil)) and (not memory.token[ self ]) then
+---------------------------------------------------------------------
+
+function export.clone (self, definitions)
+    if memory.destroyed[ self ] then
+        error (reason.invalid.destroyed)
+    end
+
+    if (not rawequal (self, nil)) and (not memory.delegate[ self ]) then
         error (reason.invalid.prototype)
     end
 
-    if rawequal (structure, nil) then
-        structure = { }
-    end
-
     local object = { }
-    local ID     = token.generate ( )
 
-    memory.token    [ object ] = ID
-    memory.prototype[ ID ]     = self
-    memory.structure[ ID ]     = structure
-    memory.clones   [ ID ]     = setmetatable ({ }, weak.key)
-    memory.updated  [ ID ]     = { }
-
-    do
-        if not rawequal (self, nil) then
-            local prototypeID = memory.token[ self ]
-
-            memory.clones[ prototypeID ][ object ] = true
-        end
+    if rawequal (definitions, nil) then
+        definitions = { }
     end
 
-    -- metatable is not defined here to avoid unexpected recursion --
-    -- while loading modules from internals library namespace...   --
+    if rawequal (self, nil) then
+        memory.delegate[ object ] = structure.create (definitions)
+
+    else
+        memory.prototype[ object ] = self
+
+        local former, latter = structure.split (memory.delegate[ self ], definitions)
+
+        memory.delegate[ self ]   = former
+        memory.delegate[ object ] = latter
+    end
+
+    setmetatable (object, metatable)
+
     return object
 end
 
 ---------------------------------------------------------------------
 
+-- resemblance is transitive and reflexive --
 function export.resembles (self, object)
-    local ID        = memory.token    [ self ]
-    local prototype = memory.prototype[ ID ]
+    if rawequal (self, object) then return true end
 
-    while not rawequal (prototype, nil) do
+    local prototype = memory.prototype[ self ]
+
+    while prototype do
         if rawequal (prototype, object) then
             return true
 
         else
-            ID        = memory.token    [ prototype ]
-            prototype = memory.prototype[ ID ]
+            prototype = memory.prototype[ prototype ]
         end
     end
 
@@ -57,16 +61,25 @@ end
 ---------------------------------------------------------------------
 
 function export.destroy (self)
-    local ID = memory.token[ self ]
-
-    if rawequal (ID, nil) then
+    if rawequal (memory.delegate[ self ], nil) and not memory.destroyed[ self ] then
         error (reason.invalid.object)
     end
 
-    local finalizer = token.inspect (ID).__gc
-    finalizer (ID)
+    memory.destroyed[ self ] = true
+    memory.delegate[ self ]  = nil
+end
 
-    memory.destroyed[ ID ] = true
+function export.pairs (self)
+    if memory.destroyed[ self ] then
+        error (reason.invalid.destroyed)
+    end
+
+    if memory.delegate[ self ] then
+        return structure.pairs (memory.delegate[ self ])
+
+    else
+        error (reason.invalid.object)
+    end
 end
 
 ---------------------------------------------------------------------

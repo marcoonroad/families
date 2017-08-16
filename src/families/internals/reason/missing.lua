@@ -1,6 +1,10 @@
 local export = { }
 
-export.metamethod = "Please, implement the following meta-method on associated mirror: %s."
+---------------------------------------------------------------------
+
+export.property = "The property for selector [%s] is not defined (maybe it was erased)."
+
+---------------------------------------------------------------------
 
 return export
 

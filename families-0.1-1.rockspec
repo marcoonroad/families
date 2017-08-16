@@ -27,7 +27,7 @@ build = {
 
     modules = {
         [ "families" ]                          = "src/families/init.lua",
-        [ "families.internals.token" ]          = "src/families/internals/token.lua",
+        [ "families.internals.structure" ]      = "src/families/internals/structure.lua",
         [ "families.internals.metatable" ]      = "src/families/internals/metatable.lua",
         [ "families.internals.weak" ]           = "src/families/internals/weak.lua",
         [ "families.internals.standard" ]       = "src/families/internals/standard.lua",

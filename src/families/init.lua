@@ -1,6 +1,5 @@
 local export    = { }
 local standard  = require 'families.internals.standard'
-local metatable = require 'families.internals.metatable'
 
 ---------------------------------------------------------------------
 
@@ -9,9 +8,7 @@ function export.prototype (structure)
 end
 
 function export.clone (self, structure)
-    local object = standard.clone (self, structure)
-
-    return setmetatable (object, metatable)
+    return standard.clone (self, structure)
 end
 
 function export.resembles (self, object)
@@ -22,22 +19,15 @@ function export.represents (self, object)
     return export.resembles (object, self)
 end
 
---[[
-function export.reflect (self)
-    local mirror = assert (reflection.reflect (self), reason.invalid.object)
-
-    -- lazily attachs a metatable --
-    if rawequal (getmetatable (mirror), nil) then
-        setmetatable (mirror, metatable)
-    end
-
-    return mirror
-end
-]]--
-
 function export.destroy (self)
     return standard.destroy (self)
 end
+
+function export.pairs (self)
+    return standard.pairs (self)
+end
+
+---------------------------------------------------------------------
 
 return export
 

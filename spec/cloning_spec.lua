@@ -119,13 +119,18 @@ describe ("families cloning", function ( )
 
         -- that thing exists only on prototype itself --
         assert.same (point2d: print ( ), "(0, 0)")
-        assert.same (point.print, nil)
+
+        assert.error (function ( )
+            point: print ( )
+        end, reason.missing.property: format "print")
 
         -- trying to break things is the best way to improve them --
         point2d.print = nil
 
         -- still nil, despite removed prototype's selector --
-        assert.same (point.print, nil)
+        assert.error (function ( )
+            point: print ( )
+        end, reason.missing.property: format "print")
     end)
 
     it ("should not accept invalid arguments on cloning", function ( )
@@ -171,12 +176,19 @@ describe ("families cloning", function ( )
             point.y = 10
         end, reason.invalid.destroyed)
 
+        assert.error (function ( )
+            local _ = families.clone (point)
+        end, reason.invalid.destroyed)
+
         families.destroy (clone)
     end)
 
     -- ensures issue #3 fixing --
     it ("should not propagate changes on existent properties", function ( )
         local point = families.clone (point2d, { x = 7, })
+
+        assert.same (point.x, 7)
+        assert.same (point.y, 0)
 
         -- let's trigger some mutation --
         point2d: move (8, 8)
