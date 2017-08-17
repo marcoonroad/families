@@ -11,6 +11,7 @@ function export.clone (self, structure)
     return standard.clone (self, structure)
 end
 
+--[[
 function export.resembles (self, object)
     return standard.resembles (self, object)
 end
@@ -18,6 +19,7 @@ end
 function export.represents (self, object)
     return export.resembles (object, self)
 end
+]]--
 
 function export.destroy (self)
     return standard.destroy (self)

@@ -8,8 +8,12 @@ export.updated   = setmetatable ({ }, weak.key)
 export.scanner   = setmetatable ({ }, weak.key)
 export.delegate  = setmetatable ({ }, weak.key)
 export.destroyed = setmetatable ({ }, weak.key)
+export.level     = setmetatable ({ }, weak.key)
+
+--[[
 export.prototype = setmetatable ({ }, weak.key)
 export.token     = setmetatable ({ }, weak.key)
+]]--
 
 ---------------------------------------------------------------------
 

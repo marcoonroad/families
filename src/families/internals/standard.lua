@@ -22,10 +22,14 @@ function export.clone (self, definitions)
     end
 
     if rawequal (self, nil) then
+        memory.level   [ object ] = 0
         memory.delegate[ object ] = structure.create (definitions)
+        --[[
         memory.token   [ object ] = { }
+        ]]--
 
     else
+        --[[
         memory.token[ object ] = { }
 
         do
@@ -34,20 +38,29 @@ function export.clone (self, definitions)
 
             memory.prototype[ objectID ] = selfID
         end
+        ]]--
 
         local former, latter = structure.split (memory.delegate[ self ], definitions)
 
+        memory.level   [ object ] = memory.level[ self ] + 1
         memory.delegate[ self ]   = former
         memory.delegate[ object ] = latter
     end
 
     setmetatable (object, metatable)
 
+    -- force iteration --
+    if memory.level[ object ] % 100 == 0 then
+        for _, _ in export.pairs (object) do
+        end
+    end
+
     return object
 end
 
 ---------------------------------------------------------------------
 
+--[[
 -- resemblance is transitive and reflexive --
 function export.resembles (self, object)
     if memory.destroyed[ self ] or memory.destroyed[ object ] then
@@ -75,6 +88,7 @@ function export.resembles (self, object)
 
     return false
 end
+]]--
 
 ---------------------------------------------------------------------
 

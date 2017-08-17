@@ -2,7 +2,7 @@
 
 --
 --------------------------------------------------------------------------------
---         File:  families_spec.lua
+--         File:  cloning_spec.lua
 --
 --        Usage:  ./cloning_spec.lua
 --

@@ -14,8 +14,14 @@ function metatable: __index (selector)
         return value
     end
 
-    while memory.scanner[ self ] and not memory.updated[ self ][ selector ] do
-        assert (coroutine.resume (memory.scanner[ self ]))
+    -- trampoline-style to avoid depth-stack of coroutines --
+    do
+        local _
+        local scanner = memory.scanner[ self ]
+
+        while memory.scanner[ self ] and not memory.updated[ self ][ selector ] do
+            _, scanner = assert (coroutine.resume (scanner or memory.scanner[ self ]))
+        end
     end
 
     return memory.structure[ self ][ selector ]
@@ -40,9 +46,11 @@ function export.create (definitions)
 end
 
 local function scanmove (sourceID, targetID)
-    return coroutine.create (function ( )
+    local scanner
+
+    scanner = coroutine.create (function ( )
         while memory.scanner[ sourceID ] do
-            assert (coroutine.resume (memory.scanner[ sourceID ]))
+            coroutine.yield (memory.scanner[ sourceID ])
         end
 
         -- must be here to avoid unexpected stuff later --
@@ -55,12 +63,14 @@ local function scanmove (sourceID, targetID)
                 memory.structure[ targetID ][ selector ] = value
                 memory.updated  [ targetID ][ selector ] = true
 
-                coroutine.yield ( )
+                coroutine.yield (scanner)
             end
         end
 
         memory.scanner[ targetID ] = nil
     end)
+
+    return scanner
 end
 
 function export.split (originID, definitions)
@@ -83,8 +93,11 @@ function export.split (originID, definitions)
 end
 
 function export.pairs (origin)
+    local _
+    local scanner = memory.scanner[ origin ]
+
     while memory.scanner[ origin ] do
-        assert (coroutine.resume (memory.scanner[ origin ]))
+        _, scanner = assert (coroutine.resume (scanner or memory.scanner[ origin ]))
     end
 
     return pairs (memory.structure[ origin ])

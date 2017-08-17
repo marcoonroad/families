@@ -2,7 +2,7 @@
 
 --
 --------------------------------------------------------------------------------
---         File:  families_spec.lua
+--         File:  introspection_spec.lua
 --
 --        Usage:  ./introspection_spec.lua
 --
@@ -50,6 +50,7 @@ describe ("families introspection", function ( )
         sister   = asterinn,
     })
 
+--[[
     it ("should inspect ancestor", function ( )
         assert.truthy (families.resembles (asterinn, hosggar))
         assert.truthy (families.resembles (robiearj, hosggar))
@@ -129,6 +130,7 @@ describe ("families introspection", function ( )
             local _ = families.represents (object, object)
         end, reason.invalid.destroyed)
     end)
+]]--
 
     it ("should iterate even the fields from parents", function ( )
         local properties = {
