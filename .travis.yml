@@ -11,6 +11,7 @@ env:
     - LUA_VERSION="5.2.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-alfa"
     - LUA_VERSION="5.3.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-beta"
     - LUA_VERSION="5.3.4" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-gama"
+    - LUA_VERSION="5.1.4" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-delta"
 
 before_install:
   - source travis-ci.sh
@@ -28,6 +29,7 @@ cache:
     - "$HOME/.travis-ci-lua-alfa"
     - "$HOME/.travis-ci-lua-beta"
     - "$HOME/.travis-ci-lua-gama"
+    - "$HOME/.travis-ci-lua-delta"
 
 script:
   - luarocks lint "$ROCK_NAME-$ROCK_VERSION.rockspec"
