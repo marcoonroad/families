@@ -23,9 +23,17 @@ function export.clone (self, definitions)
 
     if rawequal (self, nil) then
         memory.delegate[ object ] = structure.create (definitions)
+        memory.token   [ object ] = { }
 
     else
-        memory.prototype[ object ] = self
+        memory.token[ object ] = { }
+
+        do
+            local objectID = memory.token[ object ]
+            local selfID   = memory.token[ self ]
+
+            memory.prototype[ objectID ] = selfID
+        end
 
         local former, latter = structure.split (memory.delegate[ self ], definitions)
 
@@ -42,16 +50,26 @@ end
 
 -- resemblance is transitive and reflexive --
 function export.resembles (self, object)
-    if rawequal (self, object) then return true end
+    if memory.destroyed[ self ] or memory.destroyed[ object ] then
+        error (reason.invalid.destroyed)
+    end
 
-    local prototype = memory.prototype[ self ]
+    assert (memory.delegate[ self ],   reason.invalid.object)
+    assert (memory.delegate[ object ], reason.invalid.object)
 
-    while prototype do
-        if rawequal (prototype, object) then
+    local selfID   = memory.token[ self ]
+    local objectID = memory.token[ object ]
+
+    if rawequal (selfID, objectID) then return true end
+
+    local prototypeID = memory.prototype[ selfID ]
+
+    while prototypeID do
+        if rawequal (prototypeID, objectID) then
             return true
 
         else
-            prototype = memory.prototype[ prototype ]
+            prototypeID = memory.prototype[ prototypeID ]
         end
     end
 

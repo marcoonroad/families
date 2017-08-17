@@ -54,18 +54,37 @@ describe ("families cloning", function ( )
             end,
         })
 
+        assert.equals (point3d.x, point2d.x)
+        assert.equals (point3d.y, point2d.y)
+        assert.equals (point3d.z, 0)
+
         -- some mutation occurring here --
         point2d: move (5, 12)
 
         -- but it's not propagated into clones --
-        assert.falsy (point2d.x == point3d.x)
-        assert.falsy (point2d.y == point3d.y)
+        assert.falsy  (point2d.x == point3d.x)
+        assert.falsy  (point2d.y == point3d.y)
+        assert.truthy (point3d.z == 0)
 
+        point3d: move (5, 12, 0)
+
+        assert.equals (point3d.x, point2d.x)
+        assert.equals (point3d.y, point2d.y)
+        assert.equals (point3d.z, 0)
+
+        -- clean up --
         point2d: move (-5, -12)
+
+        assert.falsy  (point2d.x == point3d.x)
+        assert.falsy  (point2d.y == point3d.y)
+        assert.truthy (point3d.z == 0)
     end)
 
     it ("should make the clone independent from prototype and vice-versa", function ( )
         local clone = families.clone (point2d, { })
+
+        assert.equals (point2d.x, clone.x)
+        assert.equals (point2d.y, clone.y)
 
         -- some mutation on cloned object here --
         clone: move (7, 3)
@@ -112,6 +131,9 @@ describe ("families cloning", function ( )
     it ("should not break lookup soundness on nil value", function ( )
         local point = families.clone (point2d, { x = 8, })
 
+        assert.equals (point.y, point2d.y)
+        assert.falsy  (point.x == point2d.x)
+
         -- let's add some thing for prototype --
         function point2d: print ( )
             return ("(%d, %d)"): format (self.x, self.y)
@@ -127,6 +149,10 @@ describe ("families cloning", function ( )
         -- trying to break things is the best way to improve them --
         point2d.print = nil
 
+        assert.error (function ( )
+            point2d: print ( )
+        end, reason.missing.property: format "print")
+
         -- still nil, despite removed prototype's selector --
         assert.error (function ( )
             point: print ( )
@@ -137,23 +163,41 @@ describe ("families cloning", function ( )
         assert.error (function ( )
             families.clone ("invalid prototype passed here", nil)
         end, reason.invalid.prototype)
+
+        assert.error (function ( )
+            local clone = families.clone (point2d, { })
+
+            families.destroy (clone)
+            families.destroy (clone)
+
+            local _ = families.clone (clone, { })
+        end, reason.invalid.destroyed)
     end)
 
     -- ensures issue #2 fixing --
     it ("should be able to propagate changes whenever they occur", function ( )
         local pointA = families.clone (point2d, { y = 14, })
 
+        assert.truthy (point2d.x == pointA.x)
+        assert.falsy  (point2d.y == pointA.y)
+
         -- triggering mutation --
         point2d: move (3, 6)
 
         assert.falsy (point2d.x == pointA.x)
+        assert.falsy (point2d.y == pointA.y)
 
         local pointB = families.clone (point2d)
+
+        assert.truthy (point2d.x == pointB.x)
+        assert.truthy (point2d.y == pointB.y)
 
         -- triggering mutation again on the same fields --
         point2d: move (-3, -6)
 
-        assert.falsy (point2d.x == pointB.x)
+        assert.falsy  (point2d.y == pointB.y)
+        assert.falsy  (point2d.x == pointB.x)
+        assert.truthy (point2d.x == pointA.x)
     end)
 
     it ("should not be usable when it enters in destroyed state", function ( )
@@ -187,8 +231,9 @@ describe ("families cloning", function ( )
     it ("should not propagate changes on existent properties", function ( )
         local point = families.clone (point2d, { x = 7, })
 
-        assert.same (point.x, 7)
-        assert.same (point.y, 0)
+        assert.same (point.x,   7)
+        assert.same (point.y,   0)
+        assert.same (point2d.y, 0)
 
         -- let's trigger some mutation --
         point2d: move (8, 8)
@@ -199,6 +244,10 @@ describe ("families cloning", function ( )
 
         -- cleanup to default state --
         point2d: move (-8, -8)
+
+        assert.truthy (point.y == point2d.y)
+        assert.falsy  (point.x == point2d.x)
+        assert.truthy (point.x == 7)
     end)
 end)
 

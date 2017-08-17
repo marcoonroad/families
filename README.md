@@ -65,7 +65,10 @@ assert (families.represents (prototype, clone))
 
 Note that resemblance and representation are transitive relations, that is, for all A, B, C
 being objects from this library, if resembles(C, B) and resembles(B, A), therefore,
-resembles(C, A) holds as well.
+resembles(C, A) holds as well. Resemblance and representation are also reflexive, meaning that
+resembles(O, O) and represents(O, O) are valid propositions for all object O defined within such
+families library. An interesting relation arises when we have resembles(X, Y) and represents(X, Y),
+in the end, X must be Y.
 
 For more information, check out our [wiki](https://github.com/marcoonroad/families/wiki) made with love!
 

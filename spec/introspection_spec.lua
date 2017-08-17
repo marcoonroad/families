@@ -92,6 +92,44 @@ describe ("families introspection", function ( )
         assert.falsy (families.represents (robiearj, emmania))
     end)
 
+    it ("should also be reflexive", function ( )
+        assert.truthy (families.resembles (hosggar,  hosggar))
+        assert.truthy (families.resembles (robiearj, robiearj))
+        assert.truthy (families.resembles (asterinn, asterinn))
+
+        assert.truthy (families.represents (hosggar,  hosggar))
+        assert.truthy (families.represents (robiearj, robiearj))
+        assert.truthy (families.represents (asterinn, asterinn))
+    end)
+
+    it ("should not inspect invalid values", function ( )
+        assert.error (function ( )
+            local _ = families.resembles (5, 4)
+        end, reason.invalid.object)
+
+        assert.error (function ( )
+            local _ = families.represents ("hey dude", "wait guy")
+        end, reason.invalid.object)
+
+        assert.error (function ( )
+            local object = families.prototype { }
+
+            families.destroy (object)
+            families.destroy (object)
+
+            local _ = families.resembles (object, object)
+        end, reason.invalid.destroyed)
+
+        assert.error (function ( )
+            local object = families.prototype { }
+
+            families.destroy (object)
+            families.destroy (object)
+
+            local _ = families.represents (object, object)
+        end, reason.invalid.destroyed)
+    end)
+
     it ("should iterate even the fields from parents", function ( )
         local properties = {
             name     = true,

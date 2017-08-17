@@ -49,7 +49,9 @@ local function scanmove (sourceID, targetID)
         local dictionary = memory.structure[ sourceID ]
 
         for selector, value in pairs (dictionary) do
-            if not memory.updated[ targetID ][ selector ] then
+            if rawequal (memory.structure[ targetID ][ selector ], nil) and
+                not memory.updated[ targetID ][ selector ]
+            then
                 memory.structure[ targetID ][ selector ] = value
                 memory.updated  [ targetID ][ selector ] = true
 
