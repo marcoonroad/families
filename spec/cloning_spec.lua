@@ -249,6 +249,19 @@ describe ("families cloning", function ( )
         assert.falsy  (point.x == point2d.x)
         assert.truthy (point.x == 7)
     end)
+
+    it ("should make nil-cloning and ex-nihilo creation equivalent", function ( )
+        local former = families.clone (nil, { name = "Zero", power = "Geass", strength = 15, intelligence = 90, })
+        local latter = families.prototype   { name = "Zero", power = "Geass", strength = 15, intelligence = 90, }
+
+        for selector, value in families.pairs (former) do
+            assert.same (value, latter[ selector ])
+        end
+
+        for selector, value in families.pairs (latter) do
+            assert.same (value, former[ selector ])
+        end
+    end)
 end)
 
 -- END --
