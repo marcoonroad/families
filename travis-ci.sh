@@ -1,6 +1,6 @@
 # Travis-CI custom script
 
-if [ -d $TRAVIS_CACHE_DIRECTORY/lua-$LUA_VERSION ]
+if [ -d $TRAVIS_CACHE_DIRECTORY/lua-$LUA_VERSION/install ]
 then
     echo ""
     echo "==========================================================="
@@ -19,7 +19,7 @@ else
     tar zxf lua-$LUA_VERSION.tar.gz
     cd lua-$LUA_VERSION
     make linux test
-    make local
+    make install INSTALL_TOP=$TRAVIS_CACHE_DIRECTORY/lua-$LUA_VERSION/install # make local
     cd ..
     echo "*** Lua is built!"
     echo "==========================================================="
