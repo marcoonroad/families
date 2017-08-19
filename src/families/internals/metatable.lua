@@ -66,9 +66,11 @@ function export: __gc ( )
                 memory.updated  [ clone ][ selector ] = true
             end
 
-            -- link self's clones against self's prototype --
-            memory.prototype          [ clone ] = prototype
-            memory.clones[ prototype ][ clone ] = true
+            if prototype then
+                -- link self's clones against self's prototype --
+                memory.prototype[ clone ]           = prototype
+                memory.clones[ prototype ][ clone ] = true
+            end
         end
     end
 
