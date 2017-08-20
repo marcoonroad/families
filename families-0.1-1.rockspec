@@ -14,7 +14,7 @@ source = {
 description = {
     summary  = "Concatenation-based prototypes implementation for Lua.",
     detailed = detailed,
-    homepage = "http://github.com/marcoonroad/families",
+    homepage = "http://github.com/marcoonroad/families/wiki",
     license  = "MIT/X11",
 }
 
