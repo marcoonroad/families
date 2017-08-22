@@ -1,6 +1,5 @@
-local export     = { }
-local standard   = require 'families.internals.standard'
-local metatable  = require 'families.internals.metatable'
+local export    = { }
+local standard  = require 'families.internals.standard'
 
 ---------------------------------------------------------------------
 
@@ -9,14 +8,18 @@ function export.prototype (structure)
 end
 
 function export.clone (self, structure)
-    local object = standard.clone (self, structure)
-
-    return setmetatable (object, metatable)
+    return standard.clone (self, structure)
 end
 
 function export.destroy (self)
     return standard.destroy (self)
 end
+
+function export.pairs (self)
+    return standard.pairs (self)
+end
+
+---------------------------------------------------------------------
 
 return export
 
