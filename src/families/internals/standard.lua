@@ -28,21 +28,6 @@ function export.clone (self, structure)
     return object
 end
 
-function export.resembles (self, object)
-    local prototype = memory.prototype[ self ]
-
-    while not rawequal (prototype, nil) do
-        if rawequal (prototype, object) then
-            return true
-
-        else
-            prototype = memory.prototype[ prototype ]
-        end
-    end
-
-    return false
-end
-
 function export.destroy (self)
     if not memory.structure[ self ] then
         error (reason.invalid.object)
