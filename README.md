@@ -51,21 +51,7 @@ So, the equivalent relations are:
 families.prototype (structure) <===> families.clone (nil, structure)
 ```
 
-Where `structure` is the table which contains the whole definition for `prototype`. On the
-other side, there's also simple functions for introspection into result cloning hierarchy.
-They're `resembles` and `represents`, where the following holds:
-
-```lua
-local prototype = families.prototype { ... }
-local clone     = families.clone (prototype, { ... })
-
-assert (families.resembles  (clone,     prototype))
-assert (families.represents (prototype, clone))
-```
-
-Note that resemblance and representation are transitive relations, that is, for all A, B, C
-being objects from this library, if resembles(C, B) and resembles(B, A), therefore,
-resembles(C, A) holds as well.
+Where `structure` is the table which contains the whole definition for `prototype`.
 
 For more information, check out our [wiki](https://github.com/marcoonroad/families/wiki) made with love!
 
