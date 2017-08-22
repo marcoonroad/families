@@ -24,22 +24,8 @@ function export.clone (self, definitions)
     if rawequal (self, nil) then
         memory.level   [ object ] = 0
         memory.delegate[ object ] = structure.create (definitions)
-        --[[
-        memory.token   [ object ] = { }
-        ]]--
 
     else
-        --[[
-        memory.token[ object ] = { }
-
-        do
-            local objectID = memory.token[ object ]
-            local selfID   = memory.token[ self ]
-
-            memory.prototype[ objectID ] = selfID
-        end
-        ]]--
-
         local former, latter = structure.split (memory.delegate[ self ], definitions)
 
         memory.level   [ object ] = memory.level[ self ] + 1
