@@ -80,7 +80,8 @@ describe ("families cloning", function ( )
         assert.truthy (point3d.z == 0)
     end)
 
-    it ("should make the clone independent from prototype and vice-versa", function ( )
+    it ("should make the clone independent from prototype and vice-versa",
+    function ( )
         local clone = families.clone (point2d, { })
 
         assert.equals (point2d.x, clone.x)
@@ -175,7 +176,8 @@ describe ("families cloning", function ( )
     end)
 
     -- ensures issue #2 fixing --
-    it ("should be able to propagate changes whenever they occur", function ( )
+    it ("should be able to propagate changes whenever they occur",
+    function ( )
         local pointA = families.clone (point2d, { y = 14, })
 
         assert.truthy (point2d.x == pointA.x)
@@ -200,7 +202,8 @@ describe ("families cloning", function ( )
         assert.truthy (point2d.x == pointA.x)
     end)
 
-    it ("should not be usable when it enters in destroyed state", function ( )
+    it ("should not be usable when it enters in destroyed state",
+    function ( )
         assert.error (function ( )
             families.destroy ("invalid object")
         end, reason.invalid.object)
@@ -250,9 +253,21 @@ describe ("families cloning", function ( )
         assert.truthy (point.x == 7)
     end)
 
-    it ("should make nil-cloning and ex-nihilo creation equivalent", function ( )
-        local former = families.clone (nil, { name = "Zero", power = "Geass", strength = 15, intelligence = 90, })
-        local latter = families.prototype   { name = "Zero", power = "Geass", strength = 15, intelligence = 90, }
+    it ("should make nil-cloning and ex-nihilo creation equivalent",
+    function ( )
+        local former = families.clone (nil, {
+            name         = "Zero",
+            power        = "Geass",
+            strength     = 15,
+            intelligence = 90,
+        })
+
+        local latter = families.prototype {
+            name         = "Zero",
+            power        = "Geass",
+            strength     = 15,
+            intelligence = 90,
+        }
 
         for selector, value in families.pairs (former) do
             assert.same (value, latter[ selector ])

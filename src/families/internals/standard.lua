@@ -26,7 +26,8 @@ function export.clone (self, definitions)
         memory.delegate[ object ] = structure.create (definitions)
 
     else
-        local former, latter = structure.split (memory.delegate[ self ], definitions)
+        local former, latter =
+            structure.split (memory.delegate[ self ], definitions)
 
         memory.level   [ object ] = memory.level[ self ] + 1
         memory.delegate[ self ]   = former
@@ -47,7 +48,9 @@ end
 ---------------------------------------------------------------------
 
 function export.destroy (self)
-    if rawequal (memory.delegate[ self ], nil) and not memory.destroyed[ self ] then
+    if rawequal (memory.delegate[ self ], nil) and
+        not memory.destroyed[ self ]
+    then
         error (reason.invalid.object)
     end
 

@@ -19,8 +19,12 @@ function metatable: __index (selector)
         local _
         local scanner = memory.scanner[ self ]
 
-        while memory.scanner[ self ] and not memory.updated[ self ][ selector ] do
-            _, scanner = assert (coroutine.resume (scanner or memory.scanner[ self ]))
+        while memory.scanner[ self ] and
+            not memory.updated[ self ][ selector ]
+        do
+            local thread = scanner or memory.scanner[ self ]
+
+            _, scanner = assert (coroutine.resume (thread))
         end
     end
 
@@ -97,7 +101,9 @@ function export.pairs (origin)
     local scanner = memory.scanner[ origin ]
 
     while memory.scanner[ origin ] do
-        _, scanner = assert (coroutine.resume (scanner or memory.scanner[ origin ]))
+        local thread = scanner or memory.scanner[ origin ]
+
+        _, scanner = assert (coroutine.resume (thread))
     end
 
     return pairs (memory.structure[ origin ])
