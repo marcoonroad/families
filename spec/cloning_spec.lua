@@ -277,6 +277,34 @@ describe ("families cloning", function ( )
             assert.same (value, former[ selector ])
         end
     end)
+
+    it ("should not be able to remove fields on cloning", function ( )
+        -- this is due the Lua's table semantics --
+        -- and I must not break that thing...    --
+
+        local sword = families.prototype {
+            name     = "Cheap Sword",
+            weakness = { "Water", "Thunder", },
+        }
+
+        local excalibur = families.clone (sword, {
+            name     = "Excalibur Sword",
+            weakness = nil,
+        })
+
+        assert.same (sword.name, "Cheap Sword")
+        assert.same (sword.weakness, { "Water", "Thunder", })
+
+        assert.same (excalibur.name, "Excalibur Sword")
+        assert.same (excalibur.weakness, { "Water", "Thunder", })
+
+        -- exclusion is only possible after cloning --
+        excalibur.weakness = nil
+
+        assert.error (function ( )
+            return excalibur.weakness
+        end, reason.missing.property: format 'weakness')
+    end)
 end)
 
 -- END --
