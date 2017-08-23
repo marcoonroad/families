@@ -1,9 +1,12 @@
+local table  = require 'table'
 local export = { }
 
 ---------------------------------------------------------------------
 
-export.property =
-    "The property for selector [%s] is not defined (maybe it was erased)."
+export.property = table.concat ({
+    "The property for selector [%s] is not defined",
+    "(Was it erased? Check it out in the code!).",
+}, " ")
 
 ---------------------------------------------------------------------
 

@@ -1,15 +1,22 @@
+local table  = require 'table'
 local export = { }
 
 ---------------------------------------------------------------------
 
-export.object =
-    "The passed value is not an object cloned by this library."
+export.object = table.concat ({
+    "The passed value is not a valid object.",
+    "Please, ensure that one cloned by this library is used here.",
+}, " ")
 
-export.prototype =
-    "Passed prototype is invalid. It must be an object or nil (ex-nihilo)."
+export.prototype = table.concat ({
+    "Passed prototype is invalid.",
+    "It must be an object or nil (ex-nihilo).",
+}, " ")
 
-export.destroyed =
-    "Reference was manually destroyed, so it renders itself unusable."
+export.destroyed = table.concat ({
+    "Used object reference was manually destroyed.",
+    "Thus it renders itself unusable until garbage collection.",
+}, " ")
 
 ---------------------------------------------------------------------
 

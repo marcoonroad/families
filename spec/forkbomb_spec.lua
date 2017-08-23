@@ -23,7 +23,6 @@
 require 'busted.runner' ( )
 
 local families = require 'families'
-local _        = require 'families.internals.reason'
 
 describe ("families clone early, clone often lemma", function ( )
     it ("should be able to clone and collect objects without problems",
