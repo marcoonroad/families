@@ -5,6 +5,13 @@ Concatenation-based prototypes implementation for Lua.
 [![Build Status](https://travis-ci.org/marcoonroad/families.svg?branch=master)](https://travis-ci.org/marcoonroad/families)
 [![Coverage Status](https://coveralls.io/repos/github/marcoonroad/families/badge.svg?branch=master)](https://coveralls.io/github/marcoonroad/families?branch=master)
 
+### Topics/Sections
+
+* Introduction
+* Usage
+* Why???
+* Further Information
+
 ### Introduction
 
 This is a simple but somehow pure OO framework for the Lua language. Pure in the
@@ -53,8 +60,17 @@ families.prototype (structure) <===> families.clone (nil, structure)
 
 Where `structure` is the table which contains the whole definition for `prototype`.
 
+### Why???
+
+I just want to _Clone early and Clone often_ without the burden of Delegation in the middle of
+path. Said that, I just want also to leverage the promising prototype-based programming with the whole
+benefits from concatenative prototypes carried together. This library aims to provide a scalable,
+fast/efficient and easy to reason prototype-based OO framework. Yet, it will be kept as simple as possible.
+In the end, it will be easy to learn, to prototype, to debug and to extend (without the fear of breaking things
+as it occurs on either delegative or class-based world).
+
+### Further Information
+
 For more information, check out our [wiki](https://github.com/marcoonroad/families/wiki) made with love!
 
 Happy hacking!
-
-END
