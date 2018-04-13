@@ -2,15 +2,45 @@
 
 Concatenation-based prototypes implementation for Lua.
 
-[![Build Status](https://travis-ci.org/marcoonroad/families.svg?branch=master)](https://travis-ci.org/marcoonroad/families)
-[![Coverage Status](https://coveralls.io/repos/github/marcoonroad/families/badge.svg?branch=master)](https://coveralls.io/github/marcoonroad/families?branch=master)
+
+<center>
+  <img src="res/lua-families.png" width="200" height="200"/> <p/> <p/>
+
+  <a href="https://travis-ci.org/marcoonroad/families">
+  <img src="https://img.shields.io/travis/marcoonroad/families.svg"/>
+  </a>
+<span> </span>
+  <a href="https://coveralls.io/github/marcoonroad/families">
+  <img src="https://img.shields.io/coveralls/github/marcoonroad/families.svg"/>
+  </a>
+<span> </span>
+  <img src="https://img.shields.io/github/license/marcoonroad/families.svg"/>
+<span> </span>
+  <a href="http://luarocks.org/modules/marcoonroad/families">
+  <img src="https://img.shields.io/luarocks/v/marcoonroad/families.svg"/>
+  </a>
+</center>
 
 ### Topics/Sections
 
+* Installation
 * Introduction
 * Usage
 * Why???
 * Further Information
+
+### Installation
+
+Through Luarocks:
+
+```shell
+$ luarocks --local install families
+```
+
+Through this project root directory:
+```shell
+$ luarocks --local make
+```
 
 ### Introduction
 
@@ -21,7 +51,7 @@ concatenative prototypes. They're implemented on the Kevo language together with
 features called _module operations_, which are in some sense akin to the well-known trait
 operators.
 
-![Concatenative Cloning](doc/concatenative-cloning.png)
+![Concatenative Cloning](res/concatenative-cloning.png)
 
 Because I already have implemented a library for software composition
 [here](http://github.com/marcoonroad/talents), I'm reserving myself to implement just

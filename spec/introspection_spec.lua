@@ -14,7 +14,7 @@
 --        Notes:  ---
 --       Author:  Marco Aurélio da Silva (marcoonroad at gmail dot com)
 -- Organization:  ---
---      Version:  1.0
+--      Version:  0.2
 --      Created:  03-08-2017
 --     Revision:  ---
 --------------------------------------------------------------------------------
@@ -25,7 +25,11 @@ require 'busted.runner' ( )
 local families = require 'families'
 local reason   = require 'families.internals.reason'
 
-describe ("families introspection", function ( )
+-- TODO
+-- reflection by mirrors will improve that.
+-- by now, let's only check if the fields
+-- match
+describe ("families introspection -", function ( )
     local hosggar = families.prototype {
         name     = "Hosggar",
         class    = "Viking",
@@ -85,7 +89,7 @@ describe ("families introspection", function ( )
                 class    = "Human Slayer",
                 race     = "Demon/Dragon",
                 gender   = "Bigender",
-                affinity = { "Dark", "Cosmos", "Light", "Ethereal", "Shade" },
+                affinity = { "Dark", "Cosmos", "Light", "Ethereal", "Shade", },
             })
 
             families.destroy (twin)

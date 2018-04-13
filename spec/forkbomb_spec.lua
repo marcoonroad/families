@@ -14,7 +14,7 @@
 --        Notes:  ---
 --       Author:  Marco Aurélio da Silva (marcoonroad at gmail dot com)
 -- Organization:  ---
---      Version:  1.0
+--      Version:  0.2
 --      Created:  17-08-2017
 --     Revision:  ---
 --------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ require 'busted.runner' ( )
 
 local families = require 'families'
 
-describe ("families clone early, clone often lemma", function ( )
+describe ("families clone early, clone often lemma -", function ( )
     it ("should be able to clone and collect objects without problems",
     function ( )
         local clones    = 1000

@@ -14,7 +14,7 @@
 --        Notes:  ---
 --       Author:  Marco Aurélio da Silva (marcoonroad at gmail dot com)
 -- Organization:  ---
---      Version:  1.0
+--      Version:  0.2
 --      Created:  03-08-2017
 --     Revision:  ---
 --------------------------------------------------------------------------------
@@ -25,7 +25,7 @@ require 'busted.runner' ( )
 local families = require 'families'
 local reason   = require 'families.internals.reason'
 
-describe ("families cloning", function ( )
+describe ("families cloning -", function ( )
     local point2d = families.prototype {
         x = 0,
         y = 0,
@@ -255,19 +255,15 @@ describe ("families cloning", function ( )
 
     it ("should make nil-cloning and ex-nihilo creation equivalent",
     function ( )
-        local former = families.clone (nil, {
-            name         = "Zero",
-            power        = "Geass",
-            strength     = 15,
-            intelligence = 90,
-        })
-
-        local latter = families.prototype {
+        local zero = {
             name         = "Zero",
             power        = "Geass",
             strength     = 15,
             intelligence = 90,
         }
+
+        local former = families.clone (nil, zero)
+        local latter = families.prototype (zero)
 
         for selector, value in families.pairs (former) do
             assert.same (value, latter[ selector ])
