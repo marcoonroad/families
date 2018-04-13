@@ -1,13 +1,10 @@
 # Travis-CI custom script
 
-if [ -d $TRAVIS_CACHE_DIRECTORY/lua-$LUA_VERSION/install ]
-then
-    echo ""
-    echo "==========================================================="
-    echo "*** Reusing cache directory $TRAVIS_CACHE_DIRECTORY..."
-    echo "==========================================================="
-    echo ""
-else
+function fail-build {
+    echo "!!! FAILED TO BUILD. exiting..." && exit
+}
+
+function build-luaenv {
     mkdir -p $TRAVIS_CACHE_DIRECTORY
     CURRENT_DIRECTORY=`pwd`
     cd $TRAVIS_CACHE_DIRECTORY
@@ -15,13 +12,13 @@ else
     echo ""
     echo "==========================================================="
     echo "*** Building lua..."
-    curl -R -O http://www.lua.org/ftp/lua-$LUA_VERSION.tar.gz
-    tar zxf lua-$LUA_VERSION.tar.gz
-    cd lua-$LUA_VERSION
-    make linux test
-    make install INSTALL_TOP=$TRAVIS_CACHE_DIRECTORY/lua-$LUA_VERSION/install # make local
-    cd ..
-    echo "*** Lua is built!"
+    curl -R -O http://www.lua.org/ftp/lua-$LUA_VERSION.tar.gz && \
+    tar zxf lua-$LUA_VERSION.tar.gz && \
+    cd lua-$LUA_VERSION && \
+    make linux test && \
+    make install INSTALL_TOP=$TRAVIS_CACHE_DIRECTORY/lua-$LUA_VERSION/install && \
+    cd .. && \
+    echo "*** Lua is built!" || fail-build
     echo "==========================================================="
     echo ""
 
@@ -30,15 +27,16 @@ else
     echo ""
     echo "==========================================================="
     echo "*** Building luarocks..."
-    wget https://www.luarocks.org/releases/luarocks-$LUAROCKS_VERSION.tar.gz
-    tar zxpf luarocks-$LUAROCKS_VERSION.tar.gz
-    cd luarocks-$LUAROCKS_VERSION
+    wget --no-check-certificate \
+    https://www.luarocks.org/releases/luarocks-$LUAROCKS_VERSION.tar.gz && \
+    tar zxpf luarocks-$LUAROCKS_VERSION.tar.gz && \
+    cd luarocks-$LUAROCKS_VERSION && \
     ./configure --with-lua=$TRAVIS_CACHE_DIRECTORY/lua-$LUA_VERSION/install \
-        --prefix=$TRAVIS_CACHE_DIRECTORY/lua-$LUA_VERSION/install
-    make build
-    make install
-    cd ..
-    echo "*** Luarocks is built!"
+    --prefix=$TRAVIS_CACHE_DIRECTORY/lua-$LUA_VERSION/install && \
+    make build && \
+    make install && \
+    cd .. && \
+    echo "*** Luarocks is built!" || fail-build
     echo "==========================================================="
     echo ""
 
@@ -56,6 +54,22 @@ else
     echo "*** Linked directories!"
     echo "==========================================================="
     echo ""
+}
+
+if [ $REBUILD_LUA ]
+then
+    build-luaenv
+fi
+
+if [ -d $TRAVIS_CACHE_DIRECTORY/lua-$LUA_VERSION/install ]
+then
+    echo ""
+    echo "==========================================================="
+    echo "*** Reusing cache directory $TRAVIS_CACHE_DIRECTORY..."
+    echo "==========================================================="
+    echo ""
+else
+    build-luaenv
 fi
 
 echo ""

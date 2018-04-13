@@ -8,10 +8,10 @@ env:
     - ROCK_NAME="families"
     - ROCK_VERSION="0.1-1"
   matrix:
-    - LUA_VERSION="5.2.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-alfa"
-    - LUA_VERSION="5.3.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-beta"
-    - LUA_VERSION="5.3.4" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-gama"
-    - LUA_VERSION="5.1.4" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-delta"
+    - LUA_VERSION="5.2.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-alfa"  REBUILD_LUA=1
+    - LUA_VERSION="5.3.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-beta"  REBUILD_LUA=1
+    - LUA_VERSION="5.3.4" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-gama"  REBUILD_LUA=1
+    - LUA_VERSION="5.1.4" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-delta" REBUILD_LUA=1
 
 before_install:
   - source travis-ci.sh
