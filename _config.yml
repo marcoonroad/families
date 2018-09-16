@@ -1,0 +1,11 @@
+title: families
+description: "Concatenation-based prototypes implementation for Lua."
+theme: jekyll-theme-architect
+show_downloads: false
+google_analytics: UA-41209773-2
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - LICENSE
+  - CNAME
+  - vendor
