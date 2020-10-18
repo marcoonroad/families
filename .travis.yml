@@ -8,10 +8,13 @@ env:
     - ROCK_NAME="families"
     - ROCK_VERSION="0.1-1"
   matrix:
-    - LUA_VERSION="5.2.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-alfa"  REBUILD_LUA=1
-    - LUA_VERSION="5.3.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-beta"  REBUILD_LUA=1
-    - LUA_VERSION="5.3.4" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-gama"  REBUILD_LUA=1
-    - LUA_VERSION="5.1.4" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-delta" REBUILD_LUA=1
+    - LUA_VERSION="5.1.4" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-5-1-4" REBUILD_LUA=1
+    - LUA_VERSION="5.2.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-5-2-1" REBUILD_LUA=1
+    - LUA_VERSION="5.2.4" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-5-2-4" REBUILD_LUA=1
+    - LUA_VERSION="5.3.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-5-3-1" REBUILD_LUA=1
+    - LUA_VERSION="5.3.4" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-5-3-4" REBUILD_LUA=1
+    - LUA_VERSION="5.3.6" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-5-3-6" REBUILD_LUA=1
+    - LUA_VERSION="5.4.1" TRAVIS_CACHE_DIRECTORY="$HOME/.travis-ci-lua-5-4-1" REBUILD_LUA=1
 
 before_install:
   - source travis-ci.sh
@@ -26,10 +29,13 @@ install:
 
 cache:
   directories:
-    - "$HOME/.travis-ci-lua-alfa"
-    - "$HOME/.travis-ci-lua-beta"
-    - "$HOME/.travis-ci-lua-gama"
-    - "$HOME/.travis-ci-lua-delta"
+    - "$HOME/.travis-ci-lua-5-1-4"
+    - "$HOME/.travis-ci-lua-5-2-1"
+    - "$HOME/.travis-ci-lua-5-2-4"
+    - "$HOME/.travis-ci-lua-5-3-1"
+    - "$HOME/.travis-ci-lua-5-3-4"
+    - "$HOME/.travis-ci-lua-5-3-6"
+    - "$HOME/.travis-ci-lua-5-4-1"
 
 script:
   - luarocks lint "$ROCK_NAME-$ROCK_VERSION.rockspec"
